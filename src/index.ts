@@ -16,11 +16,10 @@ const scrape = async () => {
   await page.goto(URL, { waitUntil: 'networkidle2' });
 
   await page.waitFor('input[id=skill_in]');
-  // @ts-ignore
-  await page.$eval('input[id=skill_in]', el => (el.value = 'Aachen'));
-  await page.click(
-    '.bgfarbeneu > div._darkoverlay > div > div > div > form > div > div > div > button',
-  );
+  await page.focus('input[id=skill_in]');
+  await page.keyboard.type('Aachen');
+  await page.keyboard.press('Enter');
+
   await page.waitForSelector('._greybox');
 
   const result = await page.evaluate(() => {
