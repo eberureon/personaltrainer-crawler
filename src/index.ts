@@ -2,9 +2,8 @@ import express from 'express';
 import puppeteer from 'puppeteer';
 
 const app = express();
-
-const cities = ['München']; // , 'Leipzig', 'Dortmund'];
-let location: string = '';
+const PORT = 8080;
+const locations = ['München', 'Leipzig', 'Dortmund'];
 
 interface DataObject {
   name?: string;
@@ -16,15 +15,14 @@ const scrape = async () => {
   const page = await browser.newPage();
   let dataList: DataObject[] = [];
 
-  for (const city of cities) {
-    location = city;
+  for (const location of locations) {
     await page.goto(
-      'https://www.personalfitness.de/suche/region-' + location + '.html',
+      `https://www.personalfitness.de/suche/region-${location}.html`,
       { waitUntil: 'networkidle2' },
     );
 
     await page.waitForSelector('.thumbnailgrau');
-    const pageData = await page.evaluate(async () => {
+    const pageData = await page.evaluate(() => {
       const pageDataList: DataObject[] = [];
       const moreTrainer = document.querySelector('#part2');
       moreTrainer.innerHTML = moreTrainer.innerHTML.replace(/(<!--|-->)/gi, '');
@@ -55,8 +53,8 @@ scrape().then(value => {
   });
 });
 
-app.listen(8080, () => {
+app.listen(PORT, () => {
   /* tslint:disable */
-  console.log(`Access your crawler now on http://localhost:8080`);
+  console.log(`Access your crawler now on http://localhost:${PORT}`);
   /* tslint:enable */
 });
