@@ -2,8 +2,8 @@ import express from 'express';
 import puppeteer from 'puppeteer';
 
 const app = express();
-const PORT = 8080;
-const locations = ['München', 'Leipzig', 'Dortmund'];
+const PORT: number = 8080;
+const locations: string[] = ['München', 'Leipzig', 'Dortmund'];
 
 interface DataObject {
   name?: string;
@@ -24,13 +24,13 @@ const scrape = async () => {
     await page.waitForSelector('.thumbnailgrau');
     const pageData = await page.evaluate(() => {
       const pageDataList: DataObject[] = [];
-      const moreTrainer = document.querySelector('#part2');
+      const moreTrainer: Element = document.querySelector('#part2');
       moreTrainer.innerHTML = moreTrainer.innerHTML.replace(/(<!--|-->)/gi, '');
 
-      const elements = document.querySelectorAll('.caption');
+      const elements: any = document.querySelectorAll('.caption');
       for (const element of elements) {
         // @ts-ignore
-        const name = element.childNodes[1].innerText;
+        const name: string = element.childNodes[1].innerText;
 
         if (name) {
           pageDataList.push({ name });
