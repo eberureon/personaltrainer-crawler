@@ -22,14 +22,16 @@ const scrape = async () => {
     );
 
     await page.waitForSelector('.thumbnailgrau');
-    const pageData = await page.evaluate(() => {
+    const pageData = await page.evaluate(async () => {
       const pageDataList: DataObject[] = [];
       const moreTrainer: Element = document.querySelector('#part2');
       moreTrainer.innerHTML = moreTrainer.innerHTML.replace(/(<!--|-->)/gi, '');
+      const btn: Element = document.querySelector('.thumbnailgrau');
 
       const elements: any = document.querySelectorAll('.caption');
       for (const element of elements) {
         // @ts-ignore
+        await btn.click();
         const name: string = element.childNodes[1].innerText;
 
         if (name) {
@@ -43,7 +45,7 @@ const scrape = async () => {
     dataList = dataList.concat(pageData);
   }
 
-  await browser.close();
+  // await browser.close();
   return dataList;
 };
 
